@@ -1,0 +1,97 @@
+MySQL Shell 8.0.36
+
+Copyright (c) 2016, 2023, Oracle and/or its affiliates.
+Oracle is a registered trademark of Oracle Corporation and/or its affiliates.
+Other names may be trademarks of their respective owners.
+
+Type '\help' or '\?' for help; '\quit' to exit.
+ MySQL  JS > \sql
+Switching to SQL mode... Commands end with ;
+ MySQL  SQL > \connect --mc root@localhost
+Creating a Classic session to 'root@localhost'
+Fetching global names for auto-completion... Press ^C to stop.
+Your MySQL connection id is 10
+Server version: 8.0.36 MySQL Community Server - GPL
+No default schema selected; type \use <schema> to set one.
+ MySQL  localhost:3306 ssl  SQL > show databases;
++--------------------+
+| Database           |
++--------------------+
+| information_schema |
+| mysql              |
+| performance_schema |
+| sakila             |
+| sys                |
+| tbd_1              |
+| world              |
++--------------------+
+7 rows in set (0.0011 sec)
+ MySQL  localhost:3306 ssl  SQL > \use sakila ;
+Default schema set to `sakila`.
+Fetching global names, object names from `sakila` for auto-completion... Press ^C to stop.
+ MySQL  localhost:3306 ssl  sakila  SQL > selec * from category;
+ERROR: 1064 (42000): You have an error in your SQL syntax; check the manual that corresponds to your MySQL server version for the right syntax to use near 'selec * from category' at line 1
+ MySQL  localhost:3306 ssl  sakila  SQL > select * from category;
++-------------+-------------+---------------------+
+| category_id | name        | last_update         |
++-------------+-------------+---------------------+
+|           1 | Action      | 2006-02-15 04:46:27 |
+|           2 | Animation   | 2006-02-15 04:46:27 |
+|           3 | Children    | 2006-02-15 04:46:27 |
+|           4 | Classics    | 2006-02-15 04:46:27 |
+|           5 | Comedy      | 2006-02-15 04:46:27 |
+|           6 | Documentary | 2006-02-15 04:46:27 |
+|           7 | Drama       | 2006-02-15 04:46:27 |
+|           8 | Family      | 2006-02-15 04:46:27 |
+|           9 | Foreign     | 2006-02-15 04:46:27 |
+|          10 | Games       | 2006-02-15 04:46:27 |
+|          11 | Horror      | 2006-02-15 04:46:27 |
+|          12 | Music       | 2006-02-15 04:46:27 |
+|          13 | New         | 2006-02-15 04:46:27 |
+|          14 | Sci-Fi      | 2006-02-15 04:46:27 |
+|          15 | Sports      | 2006-02-15 04:46:27 |
+|          16 | Travel      | 2006-02-15 04:46:27 |
++-------------+-------------+---------------------+
+16 rows in set (0.0370 sec)
+ MySQL  localhost:3306 ssl  sakila  SQL > SELECT film_category.name AS category_name, COUNT(film.film_id) AS movie_count
+
+                                       -> FROM film
+                                       -> INNER JOIN film_category ON film.film_id = film_category.film_id
+                                       -> GROUP BY film_category.name
+                                       -> ORDER BY movie_count DESC;
+ERROR: 1054 (42S22): Unknown column 'film_category.name' in 'field list'
+ MySQL  localhost:3306 ssl  sakila  SQL >
+ MySQL  localhost:3306 ssl  sakila  SQL > -- Contar el número de películas en cada categoría
+Query OK, 0 rows affected (0.0114 sec)
+ MySQL  localhost:3306 ssl  sakila  SQL > SELECT film_category.name AS category_name, COUNT(film.film_id) AS movie_count
+
+                                       -> FROM film
+                                       -> INNER JOIN film_category ON film.film_id = film_category.film_id
+                                       -> GROUP BY film_category.name
+                                       -> ORDER BY movie_count DESC;
+ERROR: 1054 (42S22): Unknown column 'film_category.name' in 'field list'
+ MySQL  localhost:3306 ssl  sakila  SQL > select category_id,count(*) as conteo from film film_category group by category_id order by conteo desc limit 1;
+ERROR: 1054 (42S22): Unknown column 'category_id' in 'field list'
+ MySQL  localhost:3306 ssl  sakila  SQL > select category_id, count(*) as conteo from film_category group by category_id order by conteo desc limit 1;
++-------------+--------+
+| category_id | conteo |
++-------------+--------+
+|          15 |     74 |
++-------------+--------+
+1 row in set (0.0232 sec)
+ MySQL  localhost:3306 ssl  sakila  SQL > select * from category where category_id=12;
++-------------+-------+---------------------+
+| category_id | name  | last_update         |
++-------------+-------+---------------------+
+|          12 | Music | 2006-02-15 04:46:27 |
++-------------+-------+---------------------+
+1 row in set (0.0007 sec)
+ MySQL  localhost:3306 ssl  sakila  SQL >
+ MySQL  localhost:3306 ssl  sakila  SQL > select * from category where category_id=15;
++-------------+--------+---------------------+
+| category_id | name   | last_update         |
++-------------+--------+---------------------+
+|          15 | Sports | 2006-02-15 04:46:27 |
++-------------+--------+---------------------+
+1 row in set (0.0007 sec)
+ MySQL  localhost:3306 ssl  sakila  SQL > select * from act
